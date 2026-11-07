@@ -1,0 +1,78 @@
+index_img: /img/img1.jpg
+
+favicon: /img/img2.jp
+
+inject:
+  head:
+    - '<link rel="stylesheet" href="/css/custom.css">'
+  bottom:
+    - <script src="/js/custom.js"></script>
+
+menu:
+  首页: / || fas fa-home
+  时间轴: /archives/ || fas fa-archive
+  友链: /link/ || fas fa-link
+  关于: /about/ || fas fa-heart
+
+nav:
+  display_title: false
+
+# 主頁subtitle
+subtitle:
+  enable: true
+  # Typewriter Effect (打字效果)
+  effect: true
+  # Customize typed.js
+  # https://github.com/mattboldt/typed.js/#customization
+  typed_option:
+  # source 調用第三方服務
+  # false 關閉調用
+  # 1  調用一言網的一句話（簡體） https://hitokoto.cn/
+  # 2  調用一句網（簡體） http://yijuzhan.com/
+  # 3  調用今日詩詞（簡體） https://www.jinrishici.com/
+  # subtitle 會先顯示 source , 再顯示 sub 的內容
+  source: false
+  # 如果關閉打字效果，subtitle 只會顯示 sub 的第一行文字
+  sub:
+    - 希望对你有所帮助
+
+# 首页卡片布局：文字叠在封面上
+index_layout: 5
+
+# 文章封面
+cover:
+  index_enable: true
+  aside_enable: true
+  archives_enable: true
+  position: both
+  default_cover:
+    - /img/cover.jpg
+
+busuanzi:
+  site_uv: true
+  site_pv: true
+  page_pv: false
+
+code_blocks:
+  # Code block theme: darker / pale night / light / ocean / false
+  theme: light
+  macStyle: true
+  # Code block height limit (unit: px)
+  height_limit: 500
+  word_wrap: false
+
+  # Toolbar
+  copy: true
+  language: true
+  # true: shrink the code blocks | false: expand the code blocks | none: expand code blocks and hide the button
+  shrink: false
+  fullpage: false
+
+font:
+  global_font_size: 16px
+  code_font_size: 15px
+  # 正文全局字体
+  font_family: '"LXGW WenKai", "PingFang SC", "Microsoft YaHei", sans-serif'
+  # 代码块字体
+  code_font_family: '"Consolas", "Menlo", monospace'
+

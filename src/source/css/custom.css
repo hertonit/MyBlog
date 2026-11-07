@@ -1,0 +1,158 @@
+/* 页脚：透明背景、高度随内容调整*/
+#footer {
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+  background: transparent !important;
+}
+
+/* 页脚内部间距 */
+#footer .footer-other {
+  padding: 10px 20px !important;
+  line-height: 1.5 !important;
+  background: transparent !important;
+} */
+
+/* 去掉页脚遮罩 */
+#footer::before {
+  display: none !important;
+}
+
+/* 页脚文字和链接改成黑色 */
+#footer,
+#footer * {
+  color: #000 !important;
+  text-shadow: none !important;
+}
+
+/* 导航栏透明，去掉背景和阴影 */
+#nav,
+#nav.fixed {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 柔和的樱花粉白背景 */
+body,
+#web_bg {
+  background: linear-gradient(
+    135deg,
+    #f0e1e6 0%,
+    #f8edf0 45%,
+    #fffafb 100%
+  ) !important;
+  background-attachment: fixed !important;
+}
+
+.recent-post-items{
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center;     /* 垂直居中 */
+  flex-direction: column;
+  gap:50px;
+}
+
+.recent-post-item{
+  width:800px;
+  height:400px;
+  /* margin-bottom:200px; */
+}
+
+#recent-posts .recent-post-item .post_cover {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#recent-posts .recent-post-item .post_cover::before {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(18, 18, 18, 0.4);
+  content: "";
+  backdrop-filter: blur(0px);
+}
+
+#recent-posts .recent-post-item > .recent-post-info {
+  text-align:center;
+  padding: 30px 30px 25px;
+}
+
+/* 非文章页面：隐藏侧边栏 */
+#body-wrap:not(.post) #aside-content {
+  display: none !important;
+}
+
+/* 首页文章列表占满内容区，恢复居中 */
+#body-wrap:not(.post) #recent-posts {
+  width: 100% !important;
+}
+
+/* 文章页面：侧边栏只保留章节目录 */
+#body-wrap.post #aside-content .card-widget:not(#card-toc) {
+  display: none !important;
+}
+
+/* 手机端适配 */
+@media screen and (max-width: 768px) {
+  html,
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* 首页顶部图片铺满手机屏幕 */
+  #page-header.full_page {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    min-height: 500px !important;
+    margin: 0 !important;
+    background-position: center center !important;
+    background-size: cover !important;
+  }
+
+  /* 首页内容区域 */
+  #content-inner,
+  #recent-posts,
+  .recent-post-items {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* 首页文章卡片恢复正常流式布局 */
+  #recent-posts .recent-post-item {
+    width: calc(100% - 24px) !important;
+    height: auto !important;
+    min-height: 230px !important;
+    margin: 12px !important;
+    position: relative !important;
+  }
+
+  #recent-posts .recent-post-item .post_cover {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 180px !important;
+  }
+
+  #recent-posts .recent-post-item .post_cover > a,
+  #recent-posts .recent-post-item .post_cover img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  #recent-posts .recent-post-item .recent-post-info {
+    width: 100% !important;
+    padding: 18px !important;
+    box-sizing: border-box !important;
+  }
+}

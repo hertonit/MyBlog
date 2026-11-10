@@ -259,3 +259,22 @@ body,
     display: none !important;
   }
 }
+
+/* 普通表格，排除代码高亮区域 */
+#article-container table:not(.highlight table) {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+#article-container table:not(.highlight table) > thead > tr > th,
+#article-container table:not(.highlight table) > tbody > tr > td {
+  padding: 8px 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+#article-container table:not(.highlight table) > thead > tr > th:first-child,
+#article-container table:not(.highlight table) > tbody > tr > td:first-child {
+  width: 35%;
+}

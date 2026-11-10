@@ -221,8 +221,8 @@ body,
   }
 
   /* 6.6 封面内的 a / img 铺满裁切 */
-  #recent-posts .recent-post-item .post_cover > a,
-  .recent-post-item .post_cover > a,
+  #recent-posts .recent-post-item .post_cover>a,
+  .recent-post-item .post_cover>a,
   #recent-posts .recent-post-item .post_cover img,
   .recent-post-item .post_cover img {
     display: block !important;
@@ -237,7 +237,8 @@ body,
     width: 100% !important;
     padding: 16px 16px 20px !important;
     box-sizing: border-box !important;
-    text-align: left !important;   /* 手机上居中反而不易读，不想要就删这行 */
+    text-align: left !important;
+    /* 手机上居中反而不易读，不想要就删这行 */
   }
 
   /* 6.8 正文里的图片、表格、代码块别撑破屏幕 */
@@ -245,6 +246,7 @@ body,
     max-width: 100% !important;
     height: auto !important;
   }
+
   .post-content table,
   .post-content pre {
     max-width: 100% !important;

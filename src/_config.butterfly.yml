@@ -8,11 +8,11 @@ inject:
   bottom:
     - <script src="/js/custom.js"></script>
 
-menu:
-  首页: / || fas fa-home
-  时间轴: /archives/ || fas fa-archive
-  友链: /link/ || fas fa-link
-  关于: /about/ || fas fa-heart
+# menu:
+#   首页: / || fas fa-home
+#   时间轴: /archives/ || fas fa-archive
+#   友链: /link/ || fas fa-link
+#   关于: /about/ || fas fa-heart
 
 nav:
   display_title: false
@@ -76,3 +76,7 @@ font:
   # 代码块字体
   code_font_family: '"Consolas", "Menlo", monospace'
 
+#隐藏更新日期
+post_meta:
+  post:
+    date_type: created

@@ -26,6 +26,7 @@ jobs:
         working-directory: src
         run: |
           npm ci
+          npm run clean
           npm run build
           test -s public/index.html
       - name: Upload website

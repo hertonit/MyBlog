@@ -1,0 +1,50 @@
+name: Deploy blog
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-blog
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: src/package-lock.json
+      - name: Build Hexo
+        working-directory: src
+        run: |
+          npm ci
+          npm run build
+          test -s public/index.html
+      - name: Upload website
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST_KEY: ${{ secrets.SSH_HOST_KEY }}
+        run: |
+          set -euo pipefail
+          : "${SSH_HOST:?Set SSH_HOST secret}"
+          : "${SSH_PRIVATE_KEY:?Set SSH_PRIVATE_KEY secret}"
+          : "${SSH_HOST_KEY:?Set SSH_HOST_KEY secret}"
+          SSH_PORT="${SSH_PORT:-22}"
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/blog_deploy
+          chmod 600 ~/.ssh/blog_deploy
+          printf '%s %s\n' "$SSH_HOST" "$SSH_HOST_KEY" > ~/.ssh/known_hosts
+          printf '[%s]:%s %s\n' "$SSH_HOST" "$SSH_PORT" "$SSH_HOST_KEY" >> ~/.ssh/known_hosts
+          rsync -az --omit-dir-times --no-perms --no-owner --no-group \
+            -e "ssh -i $HOME/.ssh/blog_deploy -p $SSH_PORT -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes" \
+            src/public/ "root@$SSH_HOST:/www/blog/"

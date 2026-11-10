@@ -1,0 +1,259 @@
+/* ============================================================================
+   Butterfly 主题自定义样式
+   ----------------------------------------------------------------------------
+   说明：本文件只做两件事——按功能分区 + 逐条注释。
+        所有选择器、声明、!important 与书写顺序均保持原样，
+        渲染效果与原始代码一致。
+   分区：
+     1. 页脚        2. 导航栏      3. 全局背景
+     4. 首页文章卡片 5. 侧边栏显隐   6. 移动端适配
+   ========================================================================== */
+
+
+/* ============================================================================
+   1. 页脚 Footer
+   ========================================================================== */
+
+/* 1.1 页脚容器
+   去掉主题默认的固定高度和背景色，让高度随内容自适应，
+   避免页脚下方留出空白或遮挡背景。 */
+#footer {
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+  background: transparent !important;
+}
+
+/* 1.2 页脚内容区
+   控制内边距和行高，背景透明以透出页面渐变。 */
+#footer .footer-other {
+  padding: 10px 20px !important;
+  line-height: 1.5 !important;
+  background: transparent !important;
+}
+
+/* 1.3 去掉页脚顶部的渐变遮罩
+   主题默认用 ::before 做一条渐隐过渡，这里直接隐藏。 */
+#footer::before {
+  display: none !important;
+}
+
+/* 1.4 页脚文字与链接
+   统一改成黑色，并去掉文字阴影（浅色背景下更清晰）。 */
+#footer,
+#footer * {
+  color: #000 !important;
+  text-shadow: none !important;
+}
+
+
+/* ============================================================================
+   2. 导航栏 Navbar
+   ========================================================================== */
+
+/* 2.1 导航栏透明化
+   同时覆盖 #nav 和滚动后固定的 #nav.fixed 两种状态：
+   去掉背景色、阴影和毛玻璃，让导航栏融进背景。 */
+#nav,
+#nav.fixed {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+
+/* ============================================================================
+   3. 全局背景
+   ========================================================================== */
+
+/* 3.1 樱花粉白渐变
+   135° 斜向渐变，#f0e1e6 → #f8edf0 → #fffafb；
+   background-attachment: fixed 让渐变固定在视口，滚动时不跟着走。 */
+body,
+#web_bg {
+  background: linear-gradient(135deg,
+      #f0e1e6 0%,
+      #f8edf0 45%,
+      #fffafb 100%) !important;
+  background-attachment: fixed !important;
+}
+
+
+/* ============================================================================
+   4. 首页文章卡片 Recent posts
+   ========================================================================== */
+
+/* 4.1 卡片列表容器
+   纵向排列，水平居中，卡片之间留 50px 间距。 */
+.recent-post-items {
+  display: flex;
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+  flex-direction: column;
+  gap: 50px;
+}
+
+/* 4.2 单张卡片尺寸
+   固定成 800×400 的大卡片。 */
+.recent-post-item {
+  width: 800px;
+  height: 400px;
+  /* margin-bottom: 200px; */
+}
+
+/* 4.3 封面容器
+   撑满卡片并裁掉溢出部分，保证封面不变形。 */
+#recent-posts .recent-post-item .post_cover {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 4.4 封面遮罩
+   在图片上盖一层 40% 的黑色，压暗背景以便白色标题可读；
+   backdrop-filter 目前是 0px（即不模糊），留着方便以后调整。 */
+#recent-posts .recent-post-item .post_cover::before {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(18, 18, 18, 0.4);
+  content: "";
+  backdrop-filter: blur(0px);
+}
+
+/* 4.5 卡片文字区
+   水平居中排版，四周留白。 */
+#recent-posts .recent-post-item>.recent-post-info {
+  text-align: center;
+  padding: 30px 30px 25px;
+}
+
+
+/* ============================================================================
+   5. 侧边栏显隐
+   ========================================================================== */
+
+/* 5.1 非文章页（首页、归档等）
+   直接隐藏整个侧边栏。 */
+#body-wrap:not(.post) #aside-content {
+  display: none !important;
+}
+
+/* 5.2 非文章页
+   侧边栏隐藏后，让文章列表占满内容区。 */
+#body-wrap:not(.post) #recent-posts {
+  width: 100% !important;
+}
+
+/* 5.3 文章页
+   侧边栏只保留「章节目录」卡片（#card-toc），其余小部件全部隐藏。 */
+#body-wrap.post #aside-content .card-widget:not(#card-toc) {
+  display: none !important;
+}
+
+
+/* ============================================================================
+   6. 移动端适配（宽度 ≤ 768px）
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+
+  /* 6.0 兜底：防止 iOS 自动放大字体 */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* 6.1 页面骨架：占满宽度，禁止横向滚动 */
+  html,
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* 6.2 顶图铺满一屏
+     同时写 .full_page 和裸 #page-header，防止你首页没开 full_page 时失效 */
+  #page-header.full_page,
+  #page-header.full_page #page-site-info {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    min-height: 480px !important;
+    margin: 0 !important;
+    background-position: center center !important;
+    background-size: cover !important;
+  }
+
+  /* 6.3 内容区占满 */
+  #content-inner,
+  #recent-posts,
+  .recent-post-items {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* 6.4 卡片：流式，取消 800×400 */
+  #recent-posts .recent-post-item,
+  .recent-post-item {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 12px auto !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 6.5 封面：回到文档流，固定高度 */
+  #recent-posts .recent-post-item .post_cover,
+  .recent-post-item .post_cover {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 180px !important;
+  }
+
+  /* 6.6 封面内的 a / img 铺满裁切 */
+  #recent-posts .recent-post-item .post_cover > a,
+  .recent-post-item .post_cover > a,
+  #recent-posts .recent-post-item .post_cover img,
+  .recent-post-item .post_cover img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* 6.7 文字区 */
+  #recent-posts .recent-post-item .recent-post-info,
+  .recent-post-item .recent-post-info {
+    width: 100% !important;
+    padding: 16px 16px 20px !important;
+    box-sizing: border-box !important;
+    text-align: left !important;   /* 手机上居中反而不易读，不想要就删这行 */
+  }
+
+  /* 6.8 正文里的图片、表格、代码块别撑破屏幕 */
+  .post-content img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  .post-content table,
+  .post-content pre {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+
+  /* 6.9 侧边栏在手机上本来就被主题隐藏了，这里只清掉残留间距 */
+  #aside-content {
+    display: none !important;
+  }
+}

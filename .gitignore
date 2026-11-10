@@ -2,7 +2,7 @@
 node_modules/
 
 # Hexo generated files
-public/
+# public/
 .deploy_git/
 db.json
 

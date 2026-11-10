@@ -29,6 +29,7 @@ jobs:
           npm run clean
           npm run build
           test -s public/index.html
+          test -s public/css/index.css
       - name: Upload website
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}

@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "hexo": "^8.1.2"
+    "hexo": "^8.1.2",
+    "hexo-browsersync": "^0.3.0"
   }
 }

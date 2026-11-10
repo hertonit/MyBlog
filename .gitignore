@@ -29,3 +29,7 @@ Thumbs.db
 *.tmp
 *.swp
 *~
+
+#run
+run.sh
+commit_text.txt

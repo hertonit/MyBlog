@@ -278,3 +278,15 @@ body,
 #article-container table:not(.highlight table) > tbody > tr > td:first-child {
   width: 35%;
 }
+
+/* #recent-posts .recent-post-item > .recent-post-info > .article-title {
+  font-size: 30px !important;
+} */
+
+.post-content blockquote {
+  margin: 1em 0;
+  padding: 0.4em 1em;
+  border-left: 4px solid #999;
+  background: #f6eaea;
+  color: inherit;
+}

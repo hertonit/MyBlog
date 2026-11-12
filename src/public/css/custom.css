@@ -290,3 +290,7 @@ body,
   background: #f6eaea;
   color: inherit;
 }
+
+#recent-posts .recent-post-item .article-title {
+    font-size: 40px !important;
+}

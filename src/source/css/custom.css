@@ -247,11 +247,27 @@ body,
     height: auto !important;
   }
 
-  .post-content table,
-  .post-content pre {
+  .post-content table:not(.highlight table),
+  .post-content pre:not(.highlight pre) {
     max-width: 100% !important;
     overflow-x: auto !important;
     display: block !important;
+  }
+
+  /* 保留主题的代码截断/展开样式，手机上提供足够大的点击区域。 */
+  #article-container .code-expand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  #article-container .highlight-tools .expand {
+    min-width: 44px;
+    min-height: 44px;
+    box-sizing: border-box;
+    touch-action: manipulation;
   }
 
   /* 6.9 侧边栏在手机上本来就被主题隐藏了，这里只清掉残留间距 */

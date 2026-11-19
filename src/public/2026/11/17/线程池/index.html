@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>线程池 | Homoloy's Blog</title><meta name="author" content="祈雨倾"><meta name="copyright" content="祈雨倾"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="线程池线程池是一种管理和复用线程的机制。它通常会预先创建一组线程，并把任务放入任务队列中。多个线程并发执行时，任务实际开始和完成的顺序不一定与提交顺序一致。空闲线程从队列中取出任务执行，完成后继续处理其他任务，而不是每次都创建和销毁线程，减少线程创建和销毁的开销。 C++模板 C++ 模板就是：把类型也当作参数，让同一份代码能用于不同的数据类型。  函数模板12345678910111213141">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程池">
+<meta property="og:url" content="http://example.com/2026/11/17/%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html">
+<meta property="og:site_name" content="Homoloy&#39;s Blog">
+<meta property="og:description" content="线程池线程池是一种管理和复用线程的机制。它通常会预先创建一组线程，并把任务放入任务队列中。多个线程并发执行时，任务实际开始和完成的顺序不一定与提交顺序一致。空闲线程从队列中取出任务执行，完成后继续处理其他任务，而不是每次都创建和销毁线程，减少线程创建和销毁的开销。 C++模板 C++ 模板就是：把类型也当作参数，让同一份代码能用于不同的数据类型。  函数模板12345678910111213141">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/img5.jpg">
+<meta property="article:published_time" content="2026-11-17T12:00:43.000Z">
+<meta property="article:modified_time" content="2026-11-19T09:00:44.510Z">
+<meta property="article:author" content="祈雨倾">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/img5.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "线程池",
+  "url": "http://example.com/2026/11/17/%E7%BA%BF%E7%A8%8B%E6%B1%A0/",
+  "image": "http://example.com/img/img5.jpg",
+  "datePublished": "2026-11-17T12:00:43.000Z",
+  "dateModified": "2026-11-19T09:00:44.510Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "祈雨倾",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/img2.jpg"><link rel="canonical" href="http://example.com/2026/11/17/%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":1000,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '线程池',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/img5.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"></a><a class="nav-page-title" href="/"><span class="site-name">线程池</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">线程池</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2026-11-17T12:00:43.000Z" title="Created 2026-11-17 20:00:43">2026-11-17</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><p>线程池是一种管理和复用线程的机制。它通常会预先创建一组线程，并把任务放入任务队列中。多个线程并发执行时，任务实际开始和完成的顺序不一定与提交顺序一致。空闲线程从队列中取出任务执行，完成后继续处理其他任务，而不是每次都创建和销毁线程，减少线程创建和销毁的开销。</p>
+<h2 id="C-模板"><a href="#C-模板" class="headerlink" title="C++模板"></a>C++模板</h2><blockquote>
+<p>C++ 模板就是：把类型也当作参数，让同一份代码能用于不同的数据类型。</p>
+</blockquote>
+<h3 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// //单参数模板</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">count</span><span class="params">(T x)</span></span>&#123;...&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// //多参数模板</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">count</span><span class="params">(T x, U y)</span></span>&#123;...&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//函数返回值是模板参数</span></span><br><span class="line"><span class="comment">// R 无法从函数实参推导，需要指定；T、U 可以推导：count&lt;int&gt;(3,4)</span></span><br><span class="line"><span class="comment">// 函数模板通常可以推导类型；C++17 起类模板在满足条件时也可以推导</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> R,<span class="keyword">typename</span> T,<span class="keyword">typename</span> U&gt;</span></span><br><span class="line"><span class="function">R <span class="title">count</span><span class="params">(T x, U y)</span></span>&#123;...&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//不定长参数模板，参数数量大于0</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> U,<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">count</span><span class="params">(U x, Args...args)</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>这里 typename… Args 声明一包类型，Args… args 声明对应的一包函数参数。使用 args… 可以把它们展开到函数实参列表等位置；例如 make_tuple(x, args…) 就是把所有参数放进元组。</p>
+<h3 id="结构体与类模板"><a href="#结构体与类模板" class="headerlink" title="结构体与类模板"></a>结构体与类模板</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//结构体模板</span></span><br><span class="line"><span class="comment">//调用：Point&lt;int&gt;p</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span>&#123;</span><br><span class="line">    T x,y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//类模板</span></span><br><span class="line"><span class="comment">//调用：Point&lt;int&gt;p</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    T x,y;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="future"><a href="#future" class="headerlink" title="future"></a>future</h2><h3 id="future的作用"><a href="#future的作用" class="headerlink" title="future的作用"></a>future的作用</h3><p>普通函数调用时，调用方会等函数执行完，直接接收返回值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> answer = <span class="built_in">add</span>(<span class="number">2</span>, <span class="number">3</span>); </span><br></pre></td></tr></table></figure>
+
+<p>线程池不一样，你把任务交给它后，任务可能还在排队，也可能正在其他线程中执行。此时 <code>submit</code> 可以先返回，让你继续做其他事情。</p>
+<p>那结果以后从哪里拿？用 <code>std::future</code>。可以把它理解成一张“取结果的凭证”：现在先拿凭证，等需要结果时再取。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ThreadPool <span class="title">pool</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">std::future&lt;<span class="type">int</span>&gt; result = pool.<span class="built_in">submit</span>(add, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以先做其他事情，任务可能仍在排队或执行</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> answer = result.<span class="built_in">get</span>(); <span class="comment">// 没完成就等待，完成后得到 5</span></span><br></pre></td></tr></table></figure>
+
+<p><code>future&lt;int&gt;</code> 的意思是“以后能从这里取出一个 int”，不是说它现在就是一个 int。<code>future</code> 本身也不会创建线程或执行任务，真正干活的是线程池中的工作线程。</p>
+<h3 id="get、wait-和-wait-for"><a href="#get、wait-和-wait-for" class="headerlink" title="get、wait 和 wait_for"></a>get、wait 和 wait_for</h3><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>result.get()</code></td>
+<td>等待完成并取出结果；如果任务抛出异常，就在这里重新抛出</td>
+</tr>
+<tr>
+<td><code>result.wait()</code></td>
+<td>只等待完成，不取结果，之后仍可以调用 <code>get()</code></td>
+</tr>
+<tr>
+<td><code>result.wait_for(时间)</code></td>
+<td>最多等指定时长，检查结果是否准备好</td>
+</tr>
+</tbody></table>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (result.<span class="built_in">wait_for</span>(std::chrono::<span class="built_in">milliseconds</span>(<span class="number">100</span>))</span><br><span class="line">    == std::future_status::ready) &#123;</span><br><span class="line">    std::cout &lt;&lt; result.<span class="built_in">get</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;任务还没完成\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段接在 <code>submit</code> 后使用，不要先调用前面示例中的 <code>get()</code>。对于这里线程池返回的 future，等待超时只表示还没拿到结果，不会取消任务。</p>
+<p>普通 <code>future</code> 的 <code>get()</code> 只能取一次，取完就不能再对它调用 <code>get()</code> 或等待。它也不能直接复制，但可以用 <code>std::move</code> 转交给另一个变量。如果确实需要多个地方反复读取同一个结果，可以进一步学习 <code>shared_future</code>。</p>
+<h3 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h3><p>没有返回值的任务对应 <code>future&lt;void&gt;</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> result = pool.<span class="built_in">submit</span>([] &#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;任务完成\n&quot;</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">result.<span class="built_in">get</span>(); <span class="comment">// 没有数值可取，但仍会等待完成、检查异常</span></span><br></pre></td></tr></table></figure>
+
+<p>任务通过下面的 <code>packaged_task</code> 执行时，如果任务函数抛出异常，异常会被保存起来，调用 <code>get()</code> 时再交给调用方：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> result = pool.<span class="built_in">submit</span>([]() -&gt; <span class="type">int</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;计算失败&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">int</span> answer = result.<span class="built_in">get</span>();</span><br><span class="line">    std::cout &lt;&lt; answer &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="type">const</span> std::exception&amp; e) &#123;</span><br><span class="line">    std::cout &lt;&lt; e.<span class="built_in">what</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="packaged-task"><a href="#packaged-task" class="headerlink" title="packaged_task"></a>packaged_task</h3><p><code>future</code> 负责取结果，<code>packaged_task</code> 负责包装一个任务，并在任务执行后保存返回值或异常。它们共享同一份结果存储。</p>
+<p>下面这个例子不需要线程池，先看清它们如何配合：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">std::packaged_task&lt;<span class="title">int</span><span class="params">()</span>&gt; <span class="title">task</span><span class="params">([] &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">return</span> <span class="number">2</span> + <span class="number">3</span>;</span></span></span><br><span class="line"><span class="params"><span class="function">    &#125;)</span></span>;</span><br><span class="line"></span><br><span class="line">    std::future&lt;<span class="type">int</span>&gt; result = task.<span class="built_in">get_future</span>();</span><br><span class="line">    <span class="built_in">task</span>(); <span class="comment">// 到这里才真正执行函数，结果被保存起来</span></span><br><span class="line">    std::cout &lt;&lt; result.<span class="built_in">get</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// 5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>int()</code> 表示“一个不接收参数、返回 int 的函数形式”。不要把它当成在这里调用某个函数。</p>
+<p>对照后面的线程池：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> task = std::make_shared&lt;std::packaged_task&lt;<span class="built_in">R</span>()&gt;&gt;(</span><br><span class="line">    std::<span class="built_in">bind</span>(std::forward&lt;F&gt;(f), std::forward&lt;Args&gt;(args)...));</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> result = task-&gt;<span class="built_in">get_future</span>();</span><br><span class="line"></span><br><span class="line">tasks.<span class="built_in">emplace</span>([task] &#123;</span><br><span class="line">    (*task)();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> result;</span><br></pre></td></tr></table></figure>
+
+<p>按职责来理解：</p>
+<ol>
+<li><code>bind</code> 把函数和参数绑在一起。例如把 <code>add</code>、<code>2</code>、<code>3</code> 绑成一个“调用时直接算 2 + 3”的任务，所以后面不需要再传参数。</li>
+<li><code>packaged_task&lt;R()&gt;</code> 包住这个任务，负责保存它执行后的结果或异常。</li>
+<li><code>get_future()</code> 取出对应的结果凭证，同一个 packaged_task 只能这样取一次。</li>
+<li>把 <code>[task] &#123; (*task)(); &#125;</code> 放入队列，稍后由工作线程调用。<code>task</code> 是智能指针，所以 <code>(*task)()</code> 才是在调用里面的任务。</li>
+<li><code>submit</code> 把 <code>result</code> 返回给调用方。任务完成和 <code>submit</code> 返回的先后顺序不固定，但调用方都可以通过 <code>get()</code> 正确等待结果。</li>
+</ol>
+<p>这里用 <code>shared_ptr</code>，一方面让任务在排队期间继续存在；另一方面，这个队列使用 <code>std::function&lt;void()&gt;</code>，要求放进去的函数对象能够复制，而 <code>packaged_task</code> 本身不能复制，捕获一个可复制的智能指针就能满足要求。</p>
+<p>你可以记住这条关系：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">调用方：submit 得到 future → 继续做事 → get 取结果</span><br><span class="line">工作线程：从队列取任务 → 执行 packaged_task → 保存结果</span><br></pre></td></tr></table></figure>
+
+<h2 id="decltype"><a href="#decltype" class="headerlink" title="decltype"></a>decltype</h2><p><code>decltype(表达式)</code> 得到一个类型，可以用在声明变量、定义类型别名、写函数返回类型的地方。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">2</span>;</span><br><span class="line"><span class="type">double</span> b = <span class="number">3.5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">decltype</span>(a) x = <span class="number">10</span>;       <span class="comment">// x 是 int</span></span><br><span class="line"><span class="keyword">decltype</span>(a + b) y = <span class="number">1.5</span>; <span class="comment">// a + b 的类型是 double，所以 y 是 double</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> Number = <span class="keyword">decltype</span>(a + b);</span><br><span class="line">Number z = <span class="number">4.5</span>;          <span class="comment">// 等价于 double z = 4.5;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：<code>decltype</code> 要的是类型，不是表达式算出来的值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> R = <span class="keyword">decltype</span>(<span class="built_in">add</span>(<span class="number">2</span>, <span class="number">3</span>)); <span class="comment">// R 是 int，这里并没有执行 add</span></span><br><span class="line">R answer = <span class="built_in">add</span>(<span class="number">2</span>, <span class="number">3</span>);         <span class="comment">// 这里才真正调用 add，得到 5</span></span><br></pre></td></tr></table></figure>
+
+<p>编译器只需要判断“如果这样调用，返回的是什么类型”。表达式虽然不执行，但仍然要写得合法。</p>
+<h3 id="auto-和-decltype-的区别"><a href="#auto-和-decltype-的区别" class="headerlink" title="auto 和 decltype 的区别"></a>auto 和 decltype 的区别</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> a = <span class="number">10</span>;        <span class="comment">// 根据右边的初始化表达式，推导 a 的类型</span></span><br><span class="line"><span class="keyword">decltype</span>(a) b = <span class="number">20</span>; <span class="comment">// 查询 a 的类型，再用这个类型声明 b</span></span><br></pre></td></tr></table></figure>
+
+<p><code>auto</code> 适合“我现在要定义变量，让编译器替我填类型”；<code>decltype</code> 适合“我想拿到某个表达式的类型，放到其他位置使用”。</p>
+<p>普通 <code>auto</code> 通常会去掉引用和最外层的 const，而 <code>decltype</code> 可以保留这些信息：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> n = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span>&amp; ref = n;</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> a = ref;          <span class="comment">// int，复制一个值</span></span><br><span class="line"><span class="keyword">decltype</span>(ref) b = n;   <span class="comment">// int&amp;，仍然是引用</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="在线程池里的作用"><a href="#在线程池里的作用" class="headerlink" title="在线程池里的作用"></a>在线程池里的作用</h3><p>线程池能接收不同任务：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> a = pool.<span class="built_in">submit</span>([] &#123; <span class="keyword">return</span> <span class="number">10</span>; &#125;);    <span class="comment">// future&lt;int&gt;</span></span><br><span class="line"><span class="keyword">auto</span> b = pool.<span class="built_in">submit</span>([] &#123; <span class="keyword">return</span> <span class="number">3.14</span>; &#125;);  <span class="comment">// future&lt;double&gt;</span></span><br><span class="line"><span class="keyword">auto</span> c = pool.<span class="built_in">submit</span>([] &#123; <span class="comment">/* 做事 */</span> &#125;);   <span class="comment">// future&lt;void&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>所以 <code>submit</code> 不能把返回类型写死成 <code>future&lt;int&gt;</code>。它需要先知道任务函数返回什么，再返回对应的 <code>future&lt;那个类型&gt;</code>。</p>
+<p>先用一个简单函数理解 <code>decltype</code> 如何帮忙：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> F, <span class="keyword">typename</span>... Args&gt;</span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">call</span><span class="params">(F f, Args... args)</span> -&gt; <span class="title">decltype</span><span class="params">(f(args...))</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">f</span>(args...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>后面的 <code>-&gt; decltype(f(args...))</code> 是返回类型。这里把返回类型写在参数列表后面，是为了能直接使用刚声明的 <code>f</code> 和 <code>args</code>。</p>
+<p>调用 <code>call(add, 2, 3)</code> 时，可以这样理解：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">decltype(f(args...))</span><br><span class="line">          ↓</span><br><span class="line">判断 add(2, 3) 的返回类型</span><br><span class="line">          ↓</span><br><span class="line">得到 int，所以 call 的返回类型是 int</span><br></pre></td></tr></table></figure>
+
+<p>类型判断不会执行函数；真正执行的是函数体中的 <code>return f(args...);</code>。</p>
+<p>对应到线程池的接口，可以用下面的简化形式理解：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> F, <span class="keyword">typename</span>... Args&gt;</span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">submit</span><span class="params">(F f, Args... args)</span></span></span><br><span class="line"><span class="function">    -&gt; std::future&lt;<span class="title">decltype</span><span class="params">(f(args...))</span>&gt;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这只是帮助理解返回类型的接口示意，省略了函数实现，也没有完整处理实际版本中的参数转交方式。</p>
+<h3 id="invoke-result-t"><a href="#invoke-result-t" class="headerlink" title="invoke_result_t"></a>invoke_result_t</h3><p>你下面的线程池实际上使用的是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> R = std::<span class="type">invoke_result_t</span>&lt;F, Args...&gt;;</span><br></pre></td></tr></table></figure>
+
+<p>可以直接读成：“用 Args… 这些类型的参数调用 F，返回类型是什么？把它叫作 R。”它从类型判断调用结果，支持普通函数、函数对象和成员函数指针等调用形式。</p>
+<p>它和 <code>decltype(f(args...))</code> 都能用于判断调用的返回类型，但支持的调用形式、参数的传递方式需要对应，不能在所有代码里直接互换。当前实现保留 <code>invoke_result_t</code> 即可，不需要为了学习 <code>decltype</code> 把它替换掉。</p>
+<p>得到 R 后，后面几行就容易看懂了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::future&lt;R&gt;                <span class="comment">// 调用方以后取出一个 R 类型的结果</span></span><br><span class="line">std::packaged_task&lt;<span class="built_in">R</span>()&gt;       <span class="comment">// 包装一个不接收参数、返回 R 的任务</span></span><br></pre></td></tr></table></figure>
+
+<p>如果任务返回 int，这两个地方分别就是 <code>future&lt;int&gt;</code> 和 <code>packaged_task&lt;int()&gt;</code>；如果任务不返回值，就是 <code>future&lt;void&gt;</code> 和 <code>packaged_task&lt;void()&gt;</code>。</p>
+<h3 id="括号的影响"><a href="#括号的影响" class="headerlink" title="括号的影响"></a>括号的影响</h3><p>对于直接写出的变量名，<code>decltype</code> 取得变量声明时的类型：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> n = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">decltype</span>(n) a = n;   <span class="comment">// int</span></span><br><span class="line"><span class="keyword">decltype</span>((n)) b = n; <span class="comment">// int&amp;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>n</code> 是直接查询变量声明的类型；<code>(n)</code> 则按表达式判断，表示一个能指向原变量的表达式，所以这里得到引用类型。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">20</span>; <span class="comment">// 改的是 a，不影响 n</span></span><br><span class="line">b = <span class="number">30</span>; <span class="comment">// b 引用 n，所以 n 也变成 30</span></span><br></pre></td></tr></table></figure>
+
+<p>因此不要为了“保险”随便给 decltype 里面的变量多套一层括号。当前先掌握 <code>decltype(变量名)</code> 和 <code>decltype(函数调用)</code>，就足够读懂线程池中的返回类型问题。</p>
+<h2 id="简易线程池"><a href="#简易线程池" class="headerlink" title="简易线程池"></a>简易线程池</h2><p>该线程池由任务队列和任务线程组成，先创建多个线程，由 condition_variable 来控制线程，初始线程全部睡眠，有任务提交再随机唤醒一个线程来完成任务，如果要关闭线程池，需要先把任务都完成再切断对象和线程的联系，最后清空线程数组的对象。</p>
+<p><code>ThreadPool.hpp</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstddef&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;type_traits&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ThreadPool</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">ThreadPool</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">        std::<span class="type">size_t</span> n = std::thread::hardware_concurrency())</span></span>;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">ThreadPool</span>();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">ThreadPool</span>(<span class="type">const</span> ThreadPool&amp;) = <span class="keyword">delete</span>;</span><br><span class="line">    ThreadPool&amp; <span class="keyword">operator</span>=(<span class="type">const</span> ThreadPool&amp;) = <span class="keyword">delete</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模板必须留在头文件里，否则调用点实例化不出来</span></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> F, <span class="keyword">typename</span>... Args&gt;</span><br><span class="line">    std::future&lt;std::<span class="type">invoke_result_t</span>&lt;F, Args...&gt;&gt;</span><br><span class="line">    <span class="built_in">submit</span>(F&amp;&amp; f, Args&amp;&amp;... args) &#123;</span><br><span class="line">        <span class="keyword">using</span> R = std::<span class="type">invoke_result_t</span>&lt;F, Args...&gt;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> task = std::make_shared&lt;std::packaged_task&lt;<span class="built_in">R</span>()&gt;&gt;(</span><br><span class="line">            std::<span class="built_in">bind</span>(</span><br><span class="line">                std::forward&lt;F&gt;(f),</span><br><span class="line">                std::forward&lt;Args&gt;(args)...));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> result = task-&gt;<span class="built_in">get_future</span>();</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lk</span><span class="params">(mtx)</span></span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (stop) &#123;</span><br><span class="line">                <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(</span><br><span class="line">                    <span class="string">&quot;submit on stopped ThreadPool&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            tasks.<span class="built_in">emplace</span>([task] &#123;</span><br><span class="line">                (*task)();</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cv.notify_one();</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">shutdown</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">std::<span class="type">size_t</span> <span class="title">count</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">work_loop</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    std::vector&lt;std::thread&gt; works;</span><br><span class="line">    std::queue&lt;std::function&lt;<span class="type">void</span>()&gt;&gt; tasks;</span><br><span class="line"></span><br><span class="line">    std::mutex mtx;</span><br><span class="line">    std::condition_variable cv;</span><br><span class="line">    <span class="type">bool</span> stop = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>ThreadPool.cpp</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ThreadPool.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line">ThreadPool::<span class="built_in">ThreadPool</span>(<span class="type">size_t</span> n)</span><br><span class="line">&#123;</span><br><span class="line">    n = std::<span class="built_in">max</span>&lt;<span class="type">size_t</span>&gt;(<span class="number">1</span>, n);</span><br><span class="line"></span><br><span class="line">    works.<span class="built_in">reserve</span>(n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        works.<span class="built_in">emplace_back</span>([<span class="keyword">this</span>] &#123; <span class="built_in">work_loop</span>(); &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ThreadPool::~<span class="built_in">ThreadPool</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">shutdown</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadPool::shutdown</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lk</span><span class="params">(mtx)</span></span>;</span><br><span class="line">        <span class="keyword">if</span> (stop)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        stop = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cv.notify_all();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;f : works)</span><br><span class="line">        <span class="keyword">if</span> (f.<span class="built_in">joinable</span>())</span><br><span class="line">            f.<span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">    works.<span class="built_in">clear</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">size_t</span> <span class="title">ThreadPool::count</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> works.<span class="built_in">size</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadPool::work_loop</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (;;)</span><br><span class="line">    &#123;</span><br><span class="line">        std::function&lt;<span class="type">void</span>()&gt; job;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lk</span><span class="params">(mtx)</span></span>;</span><br><span class="line">            cv.<span class="built_in">wait</span>(lk, [<span class="keyword">this</span>] &#123; <span class="keyword">return</span> stop || !tasks.<span class="built_in">empty</span>(); &#125;);</span><br><span class="line">            <span class="keyword">if</span> (stop &amp;&amp; tasks.<span class="built_in">empty</span>())</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            job = std::<span class="built_in">move</span>(tasks.<span class="built_in">front</span>());</span><br><span class="line">            tasks.<span class="built_in">pop</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">job</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">祈雨倾</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2026/11/17/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">http://example.com/2026/11/17/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/img5.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/11/12/%E7%BA%BF%E7%A8%8B/" title="线程"><img class="cover" src="/img/img3.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">线程</div></div><div class="info-2"><div class="info-item-1">线程与进程 进程：操作系统进行资源分配的基本单位，是程序的一次执行实例，拥有独立的虚拟地址空间、文件描述符等系统资源，进程之间相互隔离。线程：操作系统 CPU 调度的基本单位，隶属于进程；一个进程内可以包含多个线程，同进程的线程共享进程的地址空间与大部分资源，每个线程私有独立的调用栈、寄存器上下文。  进程就是一个程序实例，启动程序的时候操作系统会创建一个进程分配给这个程序，进程创建后，还会创建一个主线程，线程必须依附于进程存在。 C++多线程创建线程threadC++11 引入了新的标准线程库 std::thread。std::thread 在 &lt;thread&gt; 头文件中声明，因此使用 std::thread 时需要包含 &lt;thread&gt; 头文件，创建线程 std::thread t1(函数, 参数)。 12345678910111213141516171819202122232425#include&lt;iostream&gt;#include&lt;thread&gt;#include&lt;unistd.h&gt;void print(int x...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">祈雨倾</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-text">线程池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E6%A8%A1%E6%9D%BF"><span class="toc-text">C++模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF"><span class="toc-text">函数模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%8E%E7%B1%BB%E6%A8%A1%E6%9D%BF"><span class="toc-text">结构体与类模板</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#future"><span class="toc-text">future</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#future%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">future的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get%E3%80%81wait-%E5%92%8C-wait-for"><span class="toc-text">get、wait 和 wait_for</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8"><span class="toc-text">异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#packaged-task"><span class="toc-text">packaged_task</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#decltype"><span class="toc-text">decltype</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#auto-%E5%92%8C-decltype-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">auto 和 decltype 的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E7%A8%8B%E6%B1%A0%E9%87%8C%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">在线程池里的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#invoke-result-t"><span class="toc-text">invoke_result_t</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%AC%E5%8F%B7%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">括号的影响</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E6%98%93%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="toc-text">简易线程池</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/11/17/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="线程池"><img src="/img/img5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="线程池"/></a><div class="content"><a class="title" href="/2026/11/17/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" title="线程池">线程池</a><time datetime="2026-11-17T12:00:43.000Z" title="Created 2026-11-17 20:00:43">2026-11-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/11/12/%E7%BA%BF%E7%A8%8B/" title="线程"><img src="/img/img3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="线程"/></a><div class="content"><a class="title" href="/2026/11/12/%E7%BA%BF%E7%A8%8B/" title="线程">线程</a><time datetime="2026-11-12T05:03:11.000Z" title="Created 2026-11-12 13:03:11">2026-11-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/11/06/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%B5%81%E7%A8%8B/" title="搭建博客的流程"><img src="/img/img1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="搭建博客的流程"/></a><div class="content"><a class="title" href="/2026/11/06/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%B5%81%E7%A8%8B/" title="搭建博客的流程">搭建博客的流程</a><time datetime="2026-11-06T03:01:08.000Z" title="Created 2026-11-06 11:01:08">2026-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 祈雨倾</span><span class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.0"></script><script src="/js/main.js?v=5.7.0"></script><div class="js-pjax"></div><script src="/js/custom.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

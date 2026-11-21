@@ -7,7 +7,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/img1.jpg">
 <meta property="article:published_time" content="2026-11-06T03:01:08.000Z">
-<meta property="article:modified_time" content="2026-11-20T15:21:49.240Z">
+<meta property="article:modified_time" content="2026-11-21T08:27:05.100Z">
 <meta property="article:author" content="祈雨倾">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/img1.jpg"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "http://example.com/2026/11/06/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%B5%81%E7%A8%8B/",
   "image": "http://example.com/img/img1.jpg",
   "datePublished": "2026-11-06T03:01:08.000Z",
-  "dateModified": "2026-11-20T15:21:49.240Z",
+  "dateModified": "2026-11-21T08:27:05.100Z",
   "author": [
     {
       "@type": "Person",
@@ -218,7 +218,7 @@
 
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">scp -i ./ecs_key -r PATH1 用户名@服务器IP:PATH2</span><br></pre></td></tr></table></figure>
 
-<h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>由于每次修改完博客，都要执行一系列命令，包括反复切换文件路径、连接服务器和上传文件，十分繁琐，于是我向 GPT 大人求助，让它给出了一套自动部署方案。</p>
+<h2 id="GitHub-Actions"><a href="#GitHub-Actions" class="headerlink" title="GitHub Actions"></a>GitHub Actions</h2><p>由于每次修改完博客，都要执行一系列命令，包括反复切换文件路径、连接服务器和上传文件，十分繁琐，于是我向 AI 大人求助，让它给出了一套自动部署方案。</p>
 <h3 id="SSH-客户端配置"><a href="#SSH-客户端配置" class="headerlink" title="SSH 客户端配置"></a>SSH 客户端配置</h3><p>为了更方便地连接服务器和操作 GitHub 仓库，编辑本机的 <code>~/.ssh/config</code> 文件，添加如下配置：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 通过 SSH 连接 GitHub 远程仓库</span><br><span class="line">Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    User git</span><br><span class="line">    IdentityFile GitHub登录私钥路径</span><br><span class="line">    IdentitiesOnly yes</span><br><span class="line"></span><br><span class="line"># 通过 SSH 连接服务器</span><br><span class="line"># 服务器连接别名</span><br><span class="line">Host blog-server</span><br><span class="line">    # 服务器公网 IP</span><br><span class="line">    HostName 服务器IP</span><br><span class="line">    # 登录用户名</span><br><span class="line">    User root</span><br><span class="line">    # SSH 服务端口</span><br><span class="line">    Port 22</span><br><span class="line">    # 本地私钥路径</span><br><span class="line">    IdentityFile 服务器登录私钥路径</span><br><span class="line">    # 仅使用配置指定的身份密钥</span><br><span class="line">    IdentitiesOnly yes</span><br></pre></td></tr></table></figure>
 
